@@ -1,6 +1,6 @@
 <?php
-$CompleteName = $CompleteAddress = $EmailAddress = $Section = $Contact = "";
-$CompleteNameErr = $CompleteAddressErr = $EmailAddressErr = $SectionErr = $ContactErr = "";
+$CompleteName = $CompleteAddress = $EmailAddress = $password = $cpassword = $Section = $Contact = "";
+$CompleteNameErr = $CompleteAddressErr = $EmailAddressErr = $passwordErr = $cpasswordErr = $SectionErr = $ContactErr = "";
 
 if($_SERVER["REQUEST_METHOD"] == "POST"){
 
@@ -17,10 +17,23 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     }
 
     if(empty($_POST["EmailAddress"])){
-        $EmailAddressErr = "Email Adress is required";
+        $EmailAddressErr = "Email Address is required";
     } else{
         $EmailAddress = $_POST["EmailAddress"];
     }
+
+    if(empty($_POST["password"])){
+        $passwordErr ="Password is required";
+    } else{
+        $passwordErr = $_POST["password"];
+    }
+
+    if(empty($_POST["cpassword"])){
+        $cpasswordErr ="Confirm Password is required";
+    } else{
+        $cpasswordErr = $_POST["cpassword"];
+    }
+
 
     if(empty($_POST["Section"])){
         $SectionErr = "Section is required";
@@ -49,19 +62,25 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 
     <form method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
 
-        <input type="text" name="CompleteName" value="<?php echo $CompleteName; ?>"><br>
+        Name:<input type="text" name="CompleteName" value="<?php echo $CompleteName; ?>"><br>
             <span class="error"><?php echo $CompleteNameErr; ?></span><br>
 
-        <input type="text" name="CompleteAddress" value="<?php echo $CompleteAddress; ?>"><br>
+        Address:<input type="text" name="CompleteAddress" value="<?php echo $CompleteAddress; ?>"><br>
             <span class="error"><?php echo $CompleteAddressErr; ?></span><br>
 
-        <input type="text" name="EmailAddress" value="<?php echo $EmailAddress; ?>"><br>
+        EmailAddress:<input type="text" name="EmailAddress" value="<?php echo $EmailAddress; ?>"><br>
             <span class="error"><?php echo $EmailAddressErr; ?></span><br>
+
+        Password:<input type="password" name="password" value="<?php echo $password; ?>"><br>
+            <span class="error"><?php echo $passwordErr; ?></span><br>
+
+        Confirm Password:<input type="password" name="cpassword" value="<?php echo $cpassword; ?>"><br>  
+            <span class="error"><?php echo $cpasswordErr; ?></span><br>
         
-        <input type="text" name="Section" value="<?php echo $Section; ?>"><br>
+        Section:<input type="text" name="Section" value="<?php echo $Section; ?>"><br>
             <span class="error"><?php echo $SectionErr; ?></span><br>
 
-        <input type="text" name="Contact" value="<?php echo $Contact; ?>"><br>
+        Contact:<input type="text" name="Contact" value="<?php echo $Contact; ?>"><br>
             <span class="error"><?php echo $ContactErr; ?></span><br>
 
         <input type="submit" value="Submit">
@@ -69,18 +88,29 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     <hr>
 <?php
     include("class/database.php");
-    if($CompleteName && $CompleteAddress && $EmailAddress && $Section && $Contact){
+    if($CompleteName && $CompleteAddress && $EmailAddress && $password && $cpassword && $Section && $Contact){
         // echo $CompleteName . "<br>";
         // echo $CompleteAddress . "<br>";
         // echo $EmailAddress . "<br>";
         // echo $Section . "<br>";
         // echo $Contact . "<br>";
-        $query = mysqli_query($connections, 
-        "INSERT INTO mytbl(name, address, emailaddress, section, contact) 
-        VALUES('$CompleteName', '$CompleteAddress', '$EmailAddress', '$Section ', '$Contact') ");
+        // echo $password . "<br>";
+        // echo $cpassword . "<br>";
 
-        echo "<script language='javascript'>alert('New Record has been inserted!')</script>";
-        echo "<script>window.location.href='index.php';</script>";
+        $check_email = mysqli_query($connections, "SELECT * FROM mytbl WHERE emailaddress='$EmailAddress'");
+        $check_email_row = mysqli_num_rows($check_email);
+        if($check_email_row > 0){
+            $EmailAddressErr = "Email is already registered";
+        } else {
+
+        }
+
+        // $query = mysqli_query($connections, 
+        // "INSERT INTO mytbl(name, address, emailaddress, section, contact) 
+        // VALUES('$CompleteName', '$CompleteAddress', '$EmailAddress', '$Section ', '$Contact') ");
+
+        // echo "<script language='javascript'>alert('New Record has been inserted!')</script>";
+        // echo "<script>window.location.href='index.php';</script>";
     }
         $view_query = mysqli_query($connections, "SELECT * FROM mytbl");
         echo "<table  border='1' width ='50%'>";
