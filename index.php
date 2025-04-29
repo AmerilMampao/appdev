@@ -41,6 +41,12 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         }
     </style>
 
+    <br>
+    <?php include("includes/nav.php")?>
+
+    <br>
+    <br>
+
     <form method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
 
         <input type="text" name="CompleteName" value="<?php echo $CompleteName; ?>"><br>
@@ -74,7 +80,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         VALUES('$CompleteName', '$CompleteAddress', '$EmailAddress', '$Section ', '$Contact') ");
 
         echo "<script language='javascript'>alert('New Record has been inserted!')</script>";
-        echo "<script>windows.location.href='index.php';</script>";
+        echo "<script>window.location.href='index.php';</script>";
     }
         $view_query = mysqli_query($connections, "SELECT * FROM mytbl");
         echo "<table  border='1' width ='50%'>";

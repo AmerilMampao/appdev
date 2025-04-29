@@ -1,0 +1,1 @@
+<a href="index.php">Home</a>&nbsp;<a href="includes/search.php">Search</a>
