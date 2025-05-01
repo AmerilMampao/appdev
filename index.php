@@ -1,39 +1,29 @@
 <?php
-$CompleteName = $CompleteAddress = $EmailAddress = $password = $cpassword = $Section = $Contact = "";
-$CompleteNameErr = $CompleteAddressErr = $EmailAddressErr = $passwordErr = $cpasswordErr = $SectionErr = $ContactErr = "";
+
+include("class/database.php");
+
+$name = $Address = $emailaddress = $password = $cpassword = $Section = $Contact = "";
+$nameErr = $AddressErr = $emailaddressErr = $passwordErr = $cpasswordErr = $SectionErr = $ContactErr = "";
 
 if($_SERVER["REQUEST_METHOD"] == "POST"){
 
-    if(empty($_POST["CompleteName"])){
-        $CompleteNameErr = "Complete Name is required";
+    if(empty($_POST["name"])){
+        $nameErr = "Name is required";
     } else{
-        $CompleteName = $_POST["CompleteName"];
+        $name = $_POST["name"];
     }
 
-    if(empty($_POST["CompleteAddress"])){
-        $CompleteAddressErr = "Complete Address is required";
+    if(empty($_POST["Address"])){
+        $AddressErr = "Address is required";
     } else{
-        $CompleteAddress = $_POST["CompleteAddress"];
+        $Address = $_POST["Address"];
     }
 
-    if(empty($_POST["EmailAddress"])){
-        $EmailAddressErr = "Email Address is required";
+    if(empty($_POST["emailaddress"])){
+        $emailaddressErr = "Email Address is required";
     } else{
-        $EmailAddress = $_POST["EmailAddress"];
+        $emailaddress = $_POST["emailaddress"];
     }
-
-    if(empty($_POST["password"])){
-        $passwordErr ="Password is required";
-    } else{
-        $passwordErr = $_POST["password"];
-    }
-
-    if(empty($_POST["cpassword"])){
-        $cpasswordErr ="Confirm Password is required";
-    } else{
-        $cpasswordErr = $_POST["cpassword"];
-    }
-
 
     if(empty($_POST["Section"])){
         $SectionErr = "Section is required";
@@ -46,6 +36,38 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     } else{
         $Contact = $_POST["Contact"];
     }
+
+    if(empty($_POST["password"])){
+        $passwordErr ="Password is required";
+    } else{
+        $password = $_POST["password"];
+    }
+
+    if(empty($_POST["cpassword"])){
+        $cpasswordErr ="Confirm Password is required";
+    } else{
+        $cpassword = $_POST["cpassword"];
+    }
+
+    if ($name && $Address && $emailaddress && $Section && $Contact && $password && $cpassword) {
+        $check_email = mysqli_query($connections, "SELECT * FROM mytbl WHERE emailaddress='$emailaddress'");
+        $check_email_row = mysqli_num_rows($check_email);
+    
+        if ($check_email_row > 0) {
+            $emailaddressErr = "Email is already registered";
+        } else {
+            $query = mysqli_query($connections, "INSERT INTO mytbl(name, address, emailaddress, section, contact, password, account_type)
+            VALUES('$name','$Address','$emailaddress','$Section', '$Contact','$cpassword', 2)");
+    
+            if ($query) {
+                echo "<script>alert('New Record has been inserted!');</script>";
+                echo "<script>window.location.href='index.php';</script>";
+            } else {
+                echo "Error: " . mysqli_error($connections);
+            }
+        }
+    }
+    
 }
 ?>
     <style>
@@ -62,66 +84,48 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 
     <form method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
 
-        Name:<input type="text" name="CompleteName" value="<?php echo $CompleteName; ?>"><br>
-            <span class="error"><?php echo $CompleteNameErr; ?></span><br>
+        <label>Name:<input type="text" name="name" value="<?php echo $name; ?>"><br>
+            <span class="error"><?php echo $nameErr; ?></span><br></label>
 
-        Address:<input type="text" name="CompleteAddress" value="<?php echo $CompleteAddress; ?>"><br>
-            <span class="error"><?php echo $CompleteAddressErr; ?></span><br>
+        <label>Address:<input type="text" name="Address" value="<?php echo $Address; ?>"><br>
+            <span class="error"><?php echo $AddressErr; ?></span><br></label>
 
-        EmailAddress:<input type="text" name="EmailAddress" value="<?php echo $EmailAddress; ?>"><br>
-            <span class="error"><?php echo $EmailAddressErr; ?></span><br>
-
-        Password:<input type="password" name="password" value="<?php echo $password; ?>"><br>
-            <span class="error"><?php echo $passwordErr; ?></span><br>
-
-        Confirm Password:<input type="password" name="cpassword" value="<?php echo $cpassword; ?>"><br>  
-            <span class="error"><?php echo $cpasswordErr; ?></span><br>
+        <label>EmailAddress:<input type="text" name="emailaddress" value="<?php echo $emailaddress; ?>"><br>
+            <span class="error"><?php echo $emailaddressErr; ?></span><br></label>
         
-        Section:<input type="text" name="Section" value="<?php echo $Section; ?>"><br>
-            <span class="error"><?php echo $SectionErr; ?></span><br>
+        <label>Section:<input type="text" name="Section" value="<?php echo $Section; ?>"><br>
+            <span class="error"><?php echo $SectionErr; ?></span><br></label>
 
-        Contact:<input type="text" name="Contact" value="<?php echo $Contact; ?>"><br>
-            <span class="error"><?php echo $ContactErr; ?></span><br>
+        <label>Contact:<input type="text" name="Contact" value="<?php echo $Contact; ?>"><br>
+            <span class="error"><?php echo $ContactErr; ?></span><br></label>
+
+        <label>Password:<input type="password" name="password" value="<?php echo $password; ?>"><br>
+            <span class="error"><?php echo $passwordErr; ?></span><br></label>
+
+       <label>Confirm Password:<input type="password" name="cpassword" value="<?php echo $cpassword; ?>"><br>  
+            <span class="error"><?php echo $cpasswordErr; ?></span><br></label>
 
         <input type="submit" value="Submit">
+
     </form>
     <hr>
 <?php
-    include("class/database.php");
-    if($CompleteName && $CompleteAddress && $EmailAddress && $password && $cpassword && $Section && $Contact){
-        // echo $CompleteName . "<br>";
-        // echo $CompleteAddress . "<br>";
-        // echo $EmailAddress . "<br>";
-        // echo $Section . "<br>";
-        // echo $Contact . "<br>";
-        // echo $password . "<br>";
-        // echo $cpassword . "<br>";
-
-        $check_email = mysqli_query($connections, "SELECT * FROM mytbl WHERE emailaddress='$EmailAddress'");
-        $check_email_row = mysqli_num_rows($check_email);
-        if($check_email_row > 0){
-            $EmailAddressErr = "Email is already registered";
-        } else {
-
-        }
-
-        // $query = mysqli_query($connections, 
-        // "INSERT INTO mytbl(name, address, emailaddress, section, contact) 
-        // VALUES('$CompleteName', '$CompleteAddress', '$EmailAddress', '$Section ', '$Contact') ");
-
+        // $query = mysqli_query($connections, "INSERT INTO mytbl(name, address, emailaddress, section, contact) VALUES('$name', '$Address', '$emailaddress', '$Section ', '$Contact') ");
+        
         // echo "<script language='javascript'>alert('New Record has been inserted!')</script>";
         // echo "<script>window.location.href='index.php';</script>";
-    }
-        $view_query = mysqli_query($connections, "SELECT * FROM mytbl");
+
         echo "<table  border='1' width ='50%'>";
         echo"<tr>
-                <td>name</td>
-                <td>adress</td>
-                <td>emailaddress</td>
-                <td>section</td>
-                <td>contact</td>
+                <td>Name</td>
+                <td>Address</td>
+                <td>Email Address</td>
+                <td>Section</td>
+                <td>Contact</td>
                 <td>Option</td>
             </tr>";
+        $view_query = mysqli_query($connections, "SELECT * FROM mytbl");
+
         while($row = mysqli_fetch_assoc($view_query)){
             $user_id = $row["id"];
             $db_name = $row["name"];
@@ -159,7 +163,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     $Kaye = "Kaye";
 
     $names = array($Paul, $Mica, $Kaye);
-    foreach($names as $name){
-        echo $name . "<br>";
+
+    foreach($names as $display_name){
+        echo $display_name . "<br>";
     }   
 ?>

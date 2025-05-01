@@ -26,10 +26,10 @@ CREATE TABLE mytbl (
     name VARCHAR(255),
     address VARCHAR(255),
     emailaddress VARCHAR(255),
-    password VARCHAR(255),
-    accounttype VARCHAR(1),
     section VARCHAR(10),
-    contact VARCHAR(16)
+    contact VARCHAR(16),
+    password VARCHAR(255),
+    accounttype VARCHAR(1)
 );
 
 -- Insert data into the table
@@ -37,25 +37,46 @@ INSERT INTO mytbl(
     name,
     address,
     emailaddress,
-    password,
-    accounttype,
     section,
-    contact
+    contact,
+    password,
+    accounttype
 )
 VALUES(
     'Ameril Mampao',
     'Tanauan City',
     'amerilmampao@gmail.com',
-    'password123',
-    'student',
     'COM221',
-    '09062319874'
+    '09062319874',
+    'student',
+    '2'
 ),(
-    'Omar Ghazal',
+    'Poging Admin',
     'Lipa City',
     'omarg@gmail.com',
-    'password456',
-    'student',
     'COM221',
-    '09062319874'
+    '09062319874',
+    'admin123',
+    '1'
+);
+
+INSERT INTO `mytbl`(
+    `id`,
+    `name`,
+    `address`,
+    `emailaddress`,
+    `password`,
+    `account_type`,
+    `section`,
+    `contact`
+)
+VALUES(
+    NULL,
+    'Poging Admin',
+    'satabitabilang',
+    'admin@pogi.com',
+    'admin',
+    '1',
+    'pogi221',
+    '09062319879'
 );

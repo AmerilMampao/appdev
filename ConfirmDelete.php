@@ -6,7 +6,7 @@
         while($row_delete = mysqli_fetch_assoc($query_delete)){
              $user_id = $row_delete["id"];
              $db_name = $row_delete["name"];
-             $db_address = $row_delete["adress"];
+             $db_address = $row_delete["address"];
              $db_email = $row_delete["emailaddress"];
              $db_section = $row_delete["section"];
              $db_contact = $row_delete["contact"];
